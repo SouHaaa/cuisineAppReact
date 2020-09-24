@@ -42,7 +42,7 @@ export default class Acceuil extends React.Component {
                     "Vietnamese"],
             listOfCuisine: [],
             isEmpty: true,
-            nom: "",
+            nom: '',
         }
     }
     componentDidMount() {
@@ -72,14 +72,18 @@ export default class Acceuil extends React.Component {
         this.setState({
             nom: value
         });
-        this.click(value);
+        if (value !== '') {
+            this.click(value);
+        }
+
         // console.log(">> Date fin " + this.state.dateFin);
     }
 
-    click(e) {
-        const selectedOption = e;
+    click(nom) {
+        const selectedOption = nom;
         if (selectedOption !== '') {
-            this.setState({ isLoaded: false, data: [] });
+            console.log("Changé changé ", nom);
+            this.setState({ isLoaded: false });
             axios.get('https://api.spoonacular.com/recipes/complexSearch?cuisine=' + selectedOption + '&apiKey=' + window.$key)
                 .then(res => {
                     this.setState({ data: res.data.results, isLoaded: true });
@@ -108,7 +112,7 @@ export default class Acceuil extends React.Component {
                                     ?
                                     <Loading />
                                     :
-                                    <Dropdown style={{borderColor:"#ff944d"}}
+                                    <Dropdown style={{ borderColor: "#ff944d" }}
                                         placeholder='filtrer par ..'
                                         fluid
                                         search
@@ -116,7 +120,7 @@ export default class Acceuil extends React.Component {
                                         options={this.state.listOfCuisine}
                                         //value={this.state.nom}
                                         onChange={this.handleChange}
-                                        onClick={this.click}
+                                       // onClick={this.click}
                                     />
                             }
                         </Col>

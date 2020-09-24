@@ -43,7 +43,7 @@ export default class RecetteCard extends React.Component {
                                 <Card.Header>{r.title}</Card.Header>
                             </Card.Content>
                             <Card.Content extra>
-                                <Button basic color='blue' onClick={() => this.toDetail(r.id)}>Plus de détails</Button>
+                                <Button className="btn-sm" basic color='blue' onClick={() => this.toDetail(r.id)}>Détails</Button>
                             </Card.Content>
                         </Card>
                     ))}
