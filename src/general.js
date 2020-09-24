@@ -1,0 +1,1 @@
+window.$key ='966f64977a2d407ca9a1472e44adb428'; //global variable
