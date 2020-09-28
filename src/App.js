@@ -11,18 +11,22 @@ import NavBar from './NavigationBar'
 import SearchRecette from './composants/SearchRecette';
 import SearchByName from './composants/SearchByName';
 import history from './history';
-
-
+import ErrorBoundary from './ErrorBoundary';
 function App() {
 
   return (
     <div className="App">
+
       <Router history={history}>
         <NavBar />
 
         <Switch>
-          <Route exact path="/" component={Acceuil} />
-          <Route path="/detail/:id" component={Detail} />
+          <Route exact path="/" render={() => (
+            <ErrorBoundary>
+              <Acceuil />
+            </ErrorBoundary>
+          )} />
+          <Route path="/detail/:id"  component={Detail} />
           <Route path="/search/:nom" component={SearchByName} />
         </Switch>
       </Router>

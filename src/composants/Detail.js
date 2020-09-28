@@ -3,6 +3,7 @@ import { Grid, Card, Feed, List } from 'semantic-ui-react';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-grid-system';
 import Loading from './Loading';
+import ErrorBoundary from '../ErrorBoundary';
 function ListItem(props) {
 
     const step = props.step
@@ -30,7 +31,7 @@ export default class Detail extends React.Component {
             isLoaded: false,
             ingredients: [],
             page: [],
-            emptyPage: false,
+            problem: false,
             emptyStep: false
         }
     }
@@ -44,19 +45,20 @@ export default class Detail extends React.Component {
         const requestThree = axios.get(url3);
         axios.all([requestOne, requestTwo, requestThree])
             .then(res => {
-                if (res[1].data[0].length === 0) {
-                    this.setState({ emptyStep: true });
-                }
-                if (res[2].data[0] == 0) {
-                    this.setState({ emptyPage: true });
-                }
-                this.setState({
-                    ingredients: res[0].data.ingredients,
-                    instruction: res[1].data[0].steps,
-                    page: String(res[2].data),
-                    isLoaded: true
-                });
+                console.log(res[1]);
+                // console.log(res[2].data);
 
+                if (res[1].data.length === 0 || res[0].data.length === 0) {
+                    this.setState({ problem: true });
+                }
+                else {
+                    this.setState({
+                        ingredients: res[0].data.ingredients,
+                        instruction: res[1].data[0].steps,
+                        page: String(res[2].data),
+                        isLoaded: true
+                    });
+                }
             })
             .catch(err => {
                 console.log("Erreur survenue : ", err);
@@ -68,53 +70,50 @@ export default class Detail extends React.Component {
 
 
     render() {
-        return (
-            <Container style={{
-                backgroundColor: 'white',
-            }}>
+        if (this.state.problem) {
+            return (<p> Une Erreur est survenue !! Nous allons régler le problème ! Veuillez nous excusez.</p>)
+        } else
+            return (
+                <Container style={{
+                    backgroundColor: 'white',
+                }}>
+                    <ErrorBoundary>
+                        {
+                            this.state.isLoaded ?
+                                (
+                                    <Row>
+                                        <Col xs={10} sm={10} md={8} lg={8} xl={8}>
+                                            <div style={{
+                                                margin: '1%'
+                                            }}>
+                                                <h2 style={{ color: 'orange' }}>Les ingrédients</h2>
+                                                <br></br>
 
-                {
-                    this.state.isLoaded &&
-                    (
-                        <Row>
-                            <Col xs={10} sm={10} md={8} lg={8} xl={8}>
-                                <div style={{
-                                    margin: '1%'
-                                }}>
-                                    <h2 style={{ color: 'orange' }}>Les ingrédients</h2>
-                                    <br></br>
-                                    {
-                                        this.state.emptyPage ?
-                                            <p> un problème est survenu sur notre API</p>
-                                            :
-                                            <div dangerouslySetInnerHTML={{ __html: this.state.page }} />
-                                    }
-                                </div>
-                            </Col>
+                                                <div dangerouslySetInnerHTML={{ __html: this.state.page }} />
 
-                            <Col xs={10} sm={10} md={4} lg={4} xl={4}>
-                                <div style={{
-                                    margin: '1%'
-                                }}>
-                                    <h2 style={{ color: 'orange' }}>Les étapes de prépatation</h2>
-                                    <br></br>
-                                    {this.state.emptyStep ?
-                                        <p> un problème est survenu sur notre API</p>
-                                        :
+                                            </div>
+                                        </Col>
 
-                                        <BigList steps={this.state.instruction} />
-                                    }
-                                </div>
-                            </Col>
-                        </Row>
+                                        <Col xs={10} sm={10} md={4} lg={4} xl={4}>
+                                            <div style={{
+                                                margin: '1%'
+                                            }}>
+                                                <h2 style={{ color: 'orange' }}>Les étapes de prépatation</h2>
+                                                <br></br>
+                                                <BigList steps={this.state.instruction} />
+                                            </div>
+                                        </Col>
+                                    </Row>
 
-                    )
-                }
+                                )
+                                :
+                                <Loading />
+                        }
 
+                    </ErrorBoundary>
 
-
-            </Container>
-        )
+                </Container>
+            )
     }
 
 }
