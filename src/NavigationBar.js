@@ -46,8 +46,8 @@ class NavigationBar extends Component {
 
         return (
             <div style={{
-                paddingBottom: '8%',
-                // margin: '2%'
+               // paddingBottom: '10px',
+                 marginBottom: '100px'
             }}>
 
                 {<Navbar style={{

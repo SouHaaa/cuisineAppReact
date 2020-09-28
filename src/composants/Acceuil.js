@@ -4,6 +4,7 @@ import axios from 'axios';
 import RecetteCard from './RecetteCard';
 import Loading from './Loading';
 import { Container, Row, Col } from 'react-grid-system';
+import ErrorBoundary from '../ErrorBoundary';
 
 export default class Acceuil extends React.Component {
     constructor(props) {
@@ -104,7 +105,7 @@ export default class Acceuil extends React.Component {
                 <Container style={{ margin: '1%' }}>
                     <Row>
                         <Col xs={5} sm={5} md={5} lg={5} xl={5}>
-                            <h2 style={{ color: '#ff944d' }}> Filtrer par type de cuisine </h2>
+                            <h3 style={{ color: '#ff944d' }}> Filtrer par type de cuisine </h3>
                         </Col>
                         <Col xs={5} sm={5} md={5} lg={5} xl={5}>
                             {
